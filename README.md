@@ -5,6 +5,3 @@
 #### With this scraper you can scrape data about product listings such as title, price, rating, reviews count, item url, and image url with selected keyword.
 
 # Installation
-
-`!pip install `
-`from functions import scraper`
