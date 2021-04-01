@@ -4,7 +4,7 @@ import time
 import requests
 import pandas as pd
 from fake_useragent import UserAgent
-from functions import database_functions
+from connect import database_functions
 
 
 def scraper(items: int, keywords: list) -> pd.DataFrame:
@@ -40,7 +40,7 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
             for url_of_image in soup.select("img.img-responsive"):
                 urls_of_image.append(url_of_image["src"])
             for item_url in soup.select("div.description > h3 > a"):
-                urls_to_item.append("https://etsy.com/" + item_url["href"])
+                item_url.append("https://etsy.com/" + item_url["href"])
 
     collected_data = list(zip(keyword_id, title, rating, prices, reviews_count, item_url, urls_of_image))
 

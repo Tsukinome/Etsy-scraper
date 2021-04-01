@@ -1,4 +1,5 @@
-from functions import database_functions, scraping_functions
+from functions import scraping_functions
+from connect import database_functions
 
 
 def main():

@@ -7,11 +7,11 @@ def connect_database() -> psycopg2.connect:
     :return: connection
     """
     connection = psycopg2.connect(
-      database="dr4smhd483305",
-      user="zajshvxkexdumg",
-      password="b7b83ebf26e61d67fd0a2f9b4b0377de1acbd569479effb61a3d42c64dd584fe",
-      host="ec2-54-216-185-51.eu-west-1.compute.amazonaws.com",
-      port="5432")
+        database="d2ullgp5g77deq",
+        user="gjombjapnlozqc",
+        password="6c51bcf6db99739225d282c0be180f52fe0122e28f01ad6b5e66823a1cc9d625",
+        host="ec2-108-128-104-50.eu-west-1.compute.amazonaws.com",
+        port="5432")
 
     return connection
 
@@ -60,7 +60,6 @@ def create_tables() -> None:
         ''')
 
     connect.commit()
-
 
 def insert_categories(keywords) -> None:
     """
