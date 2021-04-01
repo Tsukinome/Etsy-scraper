@@ -7,10 +7,10 @@ def connect_database() -> psycopg2.connect:
     :return: connection
     """
     connection = psycopg2.connect(
-        database="d2ullgp5g77deq",
-        user="gjombjapnlozqc",
-        password="6c51bcf6db99739225d282c0be180f52fe0122e28f01ad6b5e66823a1cc9d625",
-        host="ec2-108-128-104-50.eu-west-1.compute.amazonaws.com",
+        database="dr4smhd483305",
+        user="zajshvxkexdumg",
+        password="b7b83ebf26e61d67fd0a2f9b4b0377de1acbd569479effb61a3d42c64dd584fe",
+        host="ec2-54-216-185-51.eu-west-1.compute.amazonaws.com",
         port="5432")
 
     return connection
@@ -28,6 +28,7 @@ def drop_tables() -> None:
     DROP TABLE IF EXISTS items CASCADE;''')
 
     connect.commit()
+    connect.close()
 
 
 def create_tables() -> None:
@@ -53,13 +54,13 @@ def create_tables() -> None:
         title VARCHAR (255),
         rating FLOAT,
         price VARCHAR(20),
-        reviews_count INT,
         item_url TEXT,
-        image_url TEXT,
+        url_of_image TEXT,
         FOREIGN KEY (keyword_id) REFERENCES categories(id));
         ''')
 
     connect.commit()
+    connect.close()
 
 def insert_categories(keywords) -> None:
     """
@@ -73,6 +74,7 @@ def insert_categories(keywords) -> None:
         cur.execute(f"INSERT INTO categories(keyword) VALUES('{keyword}');")
 
     connect.commit()
+    connect.close()
 
 
 def insert_information(scraped_data) -> None:
@@ -87,9 +89,10 @@ def insert_information(scraped_data) -> None:
 
     for row in scraped_data.to_records(index=False):
         keyword_id, title, rating, price, reviews_count, item_url, url_of_image = row
-        cur.execute(f"INSERT INTO items(keyword_id, title, rating, price, reviews_count, item_url, url_of_image)\
-        VALUES ('{keyword_id}', '{title}', '{rating}', '{price}', '{reviews_count}', '{item_url}', '{url_of_image}');")
+        cur.execute(f"INSERT INTO items(keyword_id, title, rating, price, item_url, url_of_image)\
+        VALUES ('{keyword_id}', '{title}', '{rating}', '{price}', '{item_url}', '{url_of_image}');")
     connect.commit()
+    connect.close()
 
 
 def export_to_csv() -> None:
@@ -100,14 +103,15 @@ def export_to_csv() -> None:
     connect = connect_database()
     cur = connect.cursor()
 
-    cur.execute('''SELECT items.id, categories.keyword, title, rating, price, reviews_count, item_url, url_of_image
+    cur.execute('''SELECT items.id, categories.keyword, title, rating, price, item_url, url_of_image
     FROM items
-    LEFT JOIN categories ON items.keyword_id = keyword.id
+    LEFT JOIN categories ON items.keyword_id = items.id
     ORDER BY items.id''')
 
     all_information = cur.fetchall()
 
-    columns = ['id', 'keyword', 'title', 'rating', 'price', 'reviews_count', 'item_url', 'url_of_image']
+    columns = ['id', 'keyword', 'title', 'rating', 'price', 'item_url', 'url_of_image']
     pd.DataFrame(all_information).to_csv("all.csv", index=False, header=columns)
 
     connect.commit()
+    connect.close()

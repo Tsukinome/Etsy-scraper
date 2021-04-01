@@ -1,7 +1,6 @@
 from functions import scraping_functions
 from connect import database_functions
 
-
 def main():
     keywords = ["masks", "rings", "anime"]
     items = 3100

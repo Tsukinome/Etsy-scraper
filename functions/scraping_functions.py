@@ -4,8 +4,6 @@ import time
 import requests
 import pandas as pd
 from fake_useragent import UserAgent
-from connect import database_functions
-
 
 def scraper(items: int, keywords: list) -> pd.DataFrame:
     """
@@ -17,7 +15,7 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
     """
 
     ua = UserAgent()
-    keyword_id, title, rating, prices, reviews_count, item_url, urls_of_image = ([] for i in range(6))
+    keyword_id, title, rating, prices, item_url, url_of_image = ([] for i in range(6))
     pages = math.ceil(items / 64)
 
     for keyword in keywords:
@@ -37,12 +35,13 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
                 rating.append(rating.text.replace("'", "''"))
             for price in soup.find_all("p", class_="wt-text-title-01"):
                 prices.append(price.text.replace(" USD", ""))
-            for url_of_image in soup.select("img.img-responsive"):
-                urls_of_image.append(url_of_image["src"])
+            for url_of_image in soup.select("img"):
+                url_of_image.append(url_of_image.text.replace("'", "''"))
             for item_url in soup.select("div.description > h3 > a"):
                 item_url.append("https://etsy.com/" + item_url["href"])
 
-    collected_data = list(zip(keyword_id, title, rating, prices, reviews_count, item_url, urls_of_image))
+    collected_data = list(zip(keyword_id, title, rating, prices, item_url, url_of_image))
 
     return pd.DataFrame(collected_data, columns= ['keyword_id', 'title', 'rating', 'price',
-                                                 'reviews_count', 'item_url', 'url_of_image'])
+                                                 'item_url', 'url_of_image'])
+
