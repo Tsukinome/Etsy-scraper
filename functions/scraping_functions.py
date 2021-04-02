@@ -15,8 +15,8 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
     """
 
     ua = UserAgent()
-    keyword_id, title, rating, prices, item_url, url_of_image = ([] for i in range(6))
-    pages = math.ceil(items / 64)
+    category_id, titles, ratings, prices, items_url, urls_of_image = ([] for i in range(6))
+    pages = math.ceil(items / 50)
 
     for keyword in keywords:
 
@@ -27,21 +27,34 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
             soup = BeautifulSoup(page.content, "html.parser")
             time.sleep(1)
 
-            for _ in soup.select("div.description > h2"):
-                keyword_id.append(keywords.index(keyword) + 1)
-            for title in soup.select("div.description > h3"):
-                title.append(title.text.replace("'", "''"))
-            for rating in soup.select("div.description > span"):
-                rating.append(rating.text.replace("'", "''"))
-            for price in soup.find_all("p", class_="wt-text-title-01"):
-                prices.append(price.text.replace(" USD", ""))
-            for url_of_image in soup.select("img"):
-                url_of_image.append(url_of_image.text.replace("'", "''"))
-            for item_url in soup.select("div.description > h3 > a"):
-                item_url.append("https://etsy.com/" + item_url["href"])
+            for _ in soup.select("div.description > h2 > a"):
+                category_id.append(keywords.index(keyword) + 1)
+            for container in soup.select(".js-merch-stash-check-listing.v2-listing-card"):
 
-    collected_data = list(zip(keyword_id, title, rating, prices, item_url, url_of_image))
+                title = container.find("h3").text.strip().replace("'", "")
+                titles.append(title)
 
-    return pd.DataFrame(collected_data, columns= ['keyword_id', 'title', 'rating', 'price',
-                                                 'item_url', 'url_of_image'])
+                price = container.find("span", class_="currency-value").text
+                prices.append(price)
+
+                try:
+                    rating = float(container.find("input").get('value'))
+                except:
+                    rating = 0
+                    pass
+
+                ratings.append(rating)
+
+                item_url = container.find("a").get('href')
+                items_url.append(item_url)
+
+                url_of_image = container.find("img").get('src')
+                if not url_of_image:
+                    url_of_image = container.find("img").get('data-src')
+                urls_of_image.append(url_of_image)
+
+    collected_data = list(zip(category_id, titles, ratings, prices, items_url, urls_of_image))
+
+    return pd.DataFrame(collected_data, columns= ['category_id', 'title', 'rating', 'price', 'item_url', 'url_of_image'])
+
 

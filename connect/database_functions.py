@@ -7,10 +7,10 @@ def connect_database() -> psycopg2.connect:
     :return: connection
     """
     connection = psycopg2.connect(
-        database="dr4smhd483305",
-        user="zajshvxkexdumg",
-        password="b7b83ebf26e61d67fd0a2f9b4b0377de1acbd569479effb61a3d42c64dd584fe",
-        host="ec2-54-216-185-51.eu-west-1.compute.amazonaws.com",
+        database="de4ub7i1hdb3d0",
+        user="tfkuknxeyfaogs",
+        password="e340fd0f4b00eff9ef77c70b0fff8629e4e232f25d3ac81ee123fbab03de3a9c",
+        host="ec2-54-228-174-49.eu-west-1.compute.amazonaws.com",
         port="5432")
 
     return connection
@@ -50,13 +50,13 @@ def create_tables() -> None:
     cur.execute('''
     CREATE TABLE IF NOT EXISTS items (
         id SERIAL PRIMARY KEY,
-        keyword_id INT,
+        category_id INT,
         title VARCHAR (255),
         rating FLOAT,
         price VARCHAR(20),
         item_url TEXT,
         url_of_image TEXT,
-        FOREIGN KEY (keyword_id) REFERENCES categories(id));
+        FOREIGN KEY (category_id) REFERENCES categories(id));
         ''')
 
     connect.commit()
@@ -88,9 +88,10 @@ def insert_information(scraped_data) -> None:
     cur = connect.cursor()
 
     for row in scraped_data.to_records(index=False):
-        keyword_id, title, rating, price, reviews_count, item_url, url_of_image = row
-        cur.execute(f"INSERT INTO items(keyword_id, title, rating, price, item_url, url_of_image)\
-        VALUES ('{keyword_id}', '{title}', '{rating}', '{price}', '{item_url}', '{url_of_image}');")
+        category_id, title, rating, price, item_url, url_of_image = row
+        cur.execute(f"INSERT INTO items(category_id, title, rating, price, item_url, url_of_image)\
+        VALUES ('{category_id}', '{title}', '{rating}', '{price}', '{item_url}', '{url_of_image}');")
+
     connect.commit()
     connect.close()
 
@@ -105,13 +106,12 @@ def export_to_csv() -> None:
 
     cur.execute('''SELECT items.id, categories.keyword, title, rating, price, item_url, url_of_image
     FROM items
-    LEFT JOIN categories ON items.keyword_id = items.id
+    LEFT JOIN categories ON items.category_id = categories.id
     ORDER BY items.id''')
 
-    all_information = cur.fetchall()
+    all = cur.fetchall()
 
-    columns = ['id', 'keyword', 'title', 'rating', 'price', 'item_url', 'url_of_image']
-    pd.DataFrame(all_information).to_csv("all.csv", index=False, header=columns)
+    pd.DataFrame(all).to_csv("all_items.csv", index=False)
 
     connect.commit()
     connect.close()
