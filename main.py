@@ -3,7 +3,7 @@ from connect import database_functions
 
 def main():
     keywords = ["masks", "rings", "anime"]
-    items = 3100
+    items = 6000
 
     scraped_data = scraping_functions.scraper(items, keywords)
 

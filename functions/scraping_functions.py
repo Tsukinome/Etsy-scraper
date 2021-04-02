@@ -9,14 +9,14 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
     """
     Scrapes etsy.com website and returns keyword_id, title, rating,
     price, item_url, urls_of_images
-    :param items: number of items to scrape of each category. Min - 50.
+    :param items: number of items to scrape of each category. Min - 64.
     :param keywords: list of categories to scrape
     :return: DataFrame
     """
 
     ua = UserAgent()
     category_id, titles, ratings, prices, items_url, urls_of_image = ([] for i in range(6))
-    pages = math.ceil(items / 50)
+    pages = math.ceil(items / 64)
 
     for keyword in keywords:
 
