@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='Scraper',
     version='',
-    packages=['functions'],
+    packages=['functions', 'connect'],
     url='',
     license='MIT',
     author='Kristina Grigaitytė',

@@ -27,9 +27,10 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
             soup = BeautifulSoup(page.content, "html.parser")
             time.sleep(1)
 
-            for _ in soup.select("div.description > h2 > a"):
-                category_id.append(keywords.index(keyword) + 1)
+
             for container in soup.select(".js-merch-stash-check-listing.v2-listing-card"):
+
+                category_id.append(keywords.index(keyword) + 1)
 
                 title = container.find("h3").text.strip().replace("'", "")
                 titles.append(title)
@@ -56,5 +57,4 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
     collected_data = list(zip(category_id, titles, ratings, prices, items_url, urls_of_image))
 
     return pd.DataFrame(collected_data, columns= ['category_id', 'title', 'rating', 'price', 'item_url', 'url_of_image'])
-
 
