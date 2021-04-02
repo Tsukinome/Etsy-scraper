@@ -8,8 +8,8 @@ from fake_useragent import UserAgent
 def scraper(items: int, keywords: list) -> pd.DataFrame:
     """
     Scrapes etsy.com website and returns keyword_id, title, rating,
-    price, reviews count, item_url, urls_of_images
-    :param items: number of items to crape of each category. Min - 64.
+    price, item_url, urls_of_images
+    :param items: number of items to scrape of each category. Min - 50.
     :param keywords: list of categories to scrape
     :return: DataFrame
     """
