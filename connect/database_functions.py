@@ -7,10 +7,10 @@ def connect_database() -> psycopg2.connect:
     :return: connection
     """
     connection = psycopg2.connect(
-        database="d1lgiavf1knpt5",
-        user="ijykdybqjjsbis",
-        password="c40298b69f8563e00cd8b829c270f0e7e9e0197919545dd8a42b4746236a6740",
-        host="ec2-52-50-171-4.eu-west-1.compute.amazonaws.com",
+        database="damd6174knjssi",
+        user="gbeqdxpsyxujjo",
+        password="ddcbdd824a39f17b153860d89bdc75a62de66ab18cc3ed0e283a8dbe8f815460",
+        host="ec2-54-220-35-19.eu-west-1.compute.amazonaws.com",
         port="5432")
 
     return connection
