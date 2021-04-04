@@ -1,8 +1,9 @@
 import math
-from bs4 import BeautifulSoup
 import time
-import requests
 import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+
 
 def scraper(items: int, keywords: list) -> pd.DataFrame:
     """
@@ -34,7 +35,7 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
                     title = container.find("h3").text.strip().replace("'", "")
                     titles.append(title)
 
-                    price = container.find("span").get("currency-value")
+                    price = int(float(container.find("span", class_="currency-value").text.strip().replace(",", "").replace(".", "")))
                     prices.append(price)
 
                     try:
