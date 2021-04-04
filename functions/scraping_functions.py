@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import time
 import requests
 import pandas as pd
-from fake_useragent import UserAgent
 
 def scraper(items: int, keywords: list) -> pd.DataFrame:
     """
@@ -14,45 +13,50 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
     :return: DataFrame
     """
 
-    ua = UserAgent()
     category_id, titles, ratings, prices, items_url, urls_of_image = ([] for i in range(6))
-    pages = int(math.ceil(items / 64))
+    pages = math.ceil(items / 64)
+    items_count = 0
 
-    for keyword in keywords:
+    while items_count < items:
+        for keyword in keywords:
+            for page in range(1, pages + 1):
 
-        for page in range(1, pages + 1):
+                url = f'https://www.etsy.com/search?q={keyword}&page={page}'
+                headers = {"User-Agent": "Mozilla/5.0"}
+                page = requests.get(url, headers=headers)
+                soup = BeautifulSoup(page.content, "html.parser")
+                time.sleep(1)
 
-            url = f'https://www.etsy.com/search?q={keyword}&page={page}'
-            page = requests.get(url, headers={'User-Agent': ua.chrome})
-            soup = BeautifulSoup(page.content, "html.parser")
-            time.sleep(1)
+                for container in soup.select(".js-merch-stash-check-listing.v2-listing-card"):
 
+                    category_id.append(keywords.index(keyword) + 1)
 
-            for container in soup.select(".js-merch-stash-check-listing.v2-listing-card"):
+                    title = container.find("h3").text.strip().replace("'", "")
+                    titles.append(title)
 
-                category_id.append(keywords.index(keyword) + 1)
+                    price = container.find("span").get("currency-value")
+                    prices.append(price)
 
-                title = container.find("h3").text.strip().replace("'", "")
-                titles.append(title)
+                    try:
+                        rating = float(container.find("input").get('value'))
+                    except:
+                        rating = 0
+                        pass
 
-                price = container.find("span", class_="currency-value").text
-                prices.append(price)
+                    ratings.append(rating)
 
-                try:
-                    rating = float(container.find("input").get('value'))
-                except:
-                    rating = 0
-                    pass
+                    item_url = container.find("a").get('href')
+                    items_url.append(item_url)
 
-                ratings.append(rating)
+                    url_of_image = container.find("img").get('src')
+                    if not url_of_image:
+                        url_of_image = container.find("img").get('data-src')
+                    urls_of_image.append(url_of_image)
 
-                item_url = container.find("a").get('href')
-                items_url.append(item_url)
+                    items_count += 1
 
-                url_of_image = container.find("img").get('src')
-                if not url_of_image:
-                    url_of_image = container.find("img").get('data-src')
-                urls_of_image.append(url_of_image)
+                    if items_count == items:
+                        break
 
     collected_data = list(zip(category_id, titles, ratings, prices, items_url, urls_of_image))
 

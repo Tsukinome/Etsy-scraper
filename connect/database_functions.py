@@ -53,7 +53,7 @@ def create_tables() -> None:
         category_id INT,
         title VARCHAR (255),
         rating FLOAT,
-        price VARCHAR(20),
+        price VARCHAR(200),
         item_url TEXT,
         url_of_image TEXT,
         FOREIGN KEY (category_id) REFERENCES categories(id));
