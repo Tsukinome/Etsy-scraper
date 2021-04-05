@@ -14,13 +14,11 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
     """
 
     category_id, titles, ratings, prices, items_url, urls_of_image = ([] for i in range(6))
-    pages = int(math.ceil(items / 50))
+    pages = math.ceil(items / 64)
     items_count = 0
 
-    for keyword in keywords:
-
-        while items_count < items:
-
+    while items_count < items:
+        for keyword in keywords:
             for page in range(1, pages + 1):
 
                 url = f'https://www.etsy.com/search?q={keyword}&page={page}'
@@ -36,7 +34,8 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
                     title = container.find("h3").text.strip().replace("'", "")
                     titles.append(title)
 
-                    price = int(float(container.find("span", class_="currency-value").text.strip().replace(",", "").replace(".", "")))
+                    price = int(float(container.find("span", class_="currency-value").text.strip().
+                                      replace(",", "").replace(".", "")))
                     prices.append(price)
 
                     try:
@@ -57,8 +56,8 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
 
                     items_count += 1
 
-                if items_count == items:
-                    break
+                    if items_count == items:
+                        break
 
     collected_data = list(zip(category_id, titles, ratings, prices, items_url, urls_of_image))
 
