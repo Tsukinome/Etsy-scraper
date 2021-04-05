@@ -4,6 +4,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
+
 def scraper(items: int, keywords: list) -> pd.DataFrame:
     """
     Scrapes etsy.com website and returns keyword_id, title, rating,
@@ -14,13 +15,11 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
     """
 
     category_id, titles, ratings, prices, items_url, urls_of_image = ([] for i in range(6))
-    pages = int(math.ceil(items / 50))
+    pages = math.ceil(items / 64)
     items_count = 0
 
-    for keyword in keywords:
-
-        while items_count < items:
-
+    while items_count < items:
+        for keyword in keywords:
             for page in range(1, pages + 1):
 
                 url = f'https://www.etsy.com/search?q={keyword}&page={page}'
@@ -57,9 +56,9 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
 
                     items_count += 1
 
-                if items_count == items:
-                    break
+                    if items_count == items:
+                        break
 
     collected_data = list(zip(category_id, titles, ratings, prices, items_url, urls_of_image))
 
-    return pd.DataFrame(collected_data, columns=['category_id', 'title', 'rating', 'price', 'item_url', 'url_of_image'])
+    return pd.DataFrame(collected_data, columns= ['category_id', 'title', 'rating', 'price', 'item_url', 'url_of_image'])
