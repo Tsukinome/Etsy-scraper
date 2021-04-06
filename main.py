@@ -15,7 +15,5 @@ def main():
     database_functions.export_to_csv()
     print("Data scraped, imported and downloaded as all_items.csv")
 
-
-
 if __name__ == "__main__":
     main()

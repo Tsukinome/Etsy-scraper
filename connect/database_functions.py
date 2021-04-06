@@ -1,5 +1,6 @@
 import pandas as pd
 import psycopg2
+import settings
 
 def connect_database() -> psycopg2.connect:
     """
@@ -7,10 +8,10 @@ def connect_database() -> psycopg2.connect:
     :return: connection
     """
     connection = psycopg2.connect(
-        database="damd6174knjssi",
-        user="gbeqdxpsyxujjo",
-        password="ddcbdd824a39f17b153860d89bdc75a62de66ab18cc3ed0e283a8dbe8f815460",
-        host="ec2-54-220-35-19.eu-west-1.compute.amazonaws.com",
+        database=settings.db,
+        user=settings.user,
+        password=settings.pas,
+        host=settings.host,
         port="5432")
 
     return connection
