@@ -7,4 +7,4 @@ db = os.getenv("DB")
 user = os.getenv("USER")
 pas = os.getenv("PASSWORD")
 host = os.getenv("HOST")
-port = os.getenv("PORT")
+
