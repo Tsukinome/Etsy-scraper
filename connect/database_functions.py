@@ -32,6 +32,7 @@ def drop_tables() -> None:
 
 
 def create_tables() -> None:
+
     """
     Creates two tables in the database:
     categories stores item category,
@@ -65,8 +66,10 @@ def create_tables() -> None:
 def insert_categories(keywords) -> None:
     """
     Inserts items categories into categories table
+    :param keywords: list of categories to scrape.
     :return: None
     """
+
     connect = connect_database()
     cur = connect.cursor()
 
