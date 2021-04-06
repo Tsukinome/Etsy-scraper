@@ -12,7 +12,7 @@ def connect_database() -> psycopg2.connect:
         user=settings.user,
         password=settings.pas,
         host=settings.host,
-        port="5432")
+        port=settings.port)
 
     return connection
 
