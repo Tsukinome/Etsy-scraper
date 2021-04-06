@@ -3,7 +3,7 @@ from connect import database_functions
 
 def main():
     keywords = ["masks", "rings", "anime"]
-    items = 9000
+    items = 18000
 
     scraped_data = scraping_functions.scraper(items, keywords)
 
@@ -14,6 +14,7 @@ def main():
     database_functions.insert_information(scraped_data)
     database_functions.export_to_csv()
     print("Data scraped, imported and downloaded as all_items.csv")
+
 
 
 if __name__ == "__main__":

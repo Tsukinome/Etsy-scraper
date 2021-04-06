@@ -15,49 +15,44 @@ def scraper(items: int, keywords: list) -> pd.DataFrame:
 
     category_id, titles, ratings, prices, items_url, urls_of_image = ([] for i in range(6))
     pages = math.ceil(items / 64)
-    items_count = 0
 
-    while items_count < items:
-        for keyword in keywords:
-            for page in range(1, pages + 1):
+    for keyword in keywords:
 
-                url = f'https://www.etsy.com/search?q={keyword}&page={page}'
-                headers = {"User-Agent": "Mozilla/5.0"}
-                page = requests.get(url, headers=headers)
-                soup = BeautifulSoup(page.content, "html.parser")
-                time.sleep(1)
+        for page in range(1, pages + 1):
 
-                for container in soup.select(".js-merch-stash-check-listing.v2-listing-card"):
+            url = f'https://www.etsy.com/search?q={keyword}&page={page}'
+            headers = {"User-Agent": "Mozilla/5.0"}
+            page = requests.get(url, headers=headers)
+            soup = BeautifulSoup(page.content, "html.parser")
+            time.sleep(1)
 
-                    category_id.append(keywords.index(keyword) + 1)
+            for container in soup.select(".js-merch-stash-check-listing.v2-listing-card"):
 
-                    title = container.find("h3").text.strip().replace("'", "")
-                    titles.append(title)
+                category_id.append(keywords.index(keyword) + 1)
 
-                    price = int(float(container.find("span", class_="currency-value").text.strip().
-                                      replace(",", "").replace(".", "")))
-                    prices.append(price)
+                title = container.find("h3").text.strip().replace("'", "")
+                titles.append(title)
 
-                    try:
-                        rating = float(container.find("input").get('value'))
-                    except:
-                        rating = 0
-                        pass
+                price = int(float(container.find("span", class_="currency-value").text.strip().
+                                  replace(",", "").replace(".", "")))
+                prices.append(price)
 
-                    ratings.append(rating)
+                try:
+                    rating = float(container.find("input").get('value'))
+                except:
+                    rating = 0
+                    pass
 
-                    item_url = container.find("a").get('href')
-                    items_url.append(item_url)
+                ratings.append(rating)
 
-                    url_of_image = container.find("img").get('src')
-                    if not url_of_image:
-                        url_of_image = container.find("img").get('data-src')
-                    urls_of_image.append(url_of_image)
+                item_url = container.find("a").get('href')
+                items_url.append(item_url)
 
-                    items_count += 1
+                url_of_image = container.find("img").get('src')
+                if not url_of_image:
+                    url_of_image = container.find("img").get('data-src')
+                urls_of_image.append(url_of_image)
 
-                    if items_count == items:
-                        break
 
     collected_data = list(zip(category_id, titles, ratings, prices, items_url, urls_of_image))
 
