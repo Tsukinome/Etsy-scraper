@@ -15,7 +15,7 @@ With this scraper you can scrape data about product listings such as title, pric
 ## Installation
 
 ```python
-!pip install git+https://github.com/Tsukinome/Scraper_225
+!pip install git+https://github.com/Tsukinome/Etsy-scraper
 ```
 
 * The scraping function: 
