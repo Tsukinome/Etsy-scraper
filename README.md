@@ -14,10 +14,19 @@ With this scraper you can scrape data about product listings such as title, pric
 
 ## Installation
 
-* `!pip install git+https://github.com/Tsukinome/Scraper_225 `
+```python
+!pip install git+https://github.com/Tsukinome/Scraper_225
+```
+
 * The scraping function: 
-`from functions import scraper `
-* The database functions: `from connect import database_func` 
+```python
+from functions import scraper
+```
+
+* The database functions: 
+```python
+from connect import database_func
+```
 
 ## Actions
 
@@ -31,8 +40,8 @@ With this scraper you can scrape data about product listings such as title, pric
 
 ## Technologies used
 * Python - version 3.9 
-* BeautifulSoup4 - for scraping
+* BeautifulSoup4
 
 ## License
-This project is licensed under the terms of the MIT license.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
