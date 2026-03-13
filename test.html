@@ -1,0 +1,168 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+}
+
+.container{
+width:900px;
+margin:auto;
+}
+
+.controls{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+margin-top:20px;
+}
+
+.slider-group{
+background:#1e293b;
+padding:10px;
+border-radius:10px;
+}
+
+label{
+display:block;
+margin-bottom:5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Web AI vs OneClaw Interactive Comparison</h2>
+
+<canvas id="chart"></canvas>
+
+<div class="controls">
+
+<div class="slider-group">
+<h3>Web AI</h3>
+
+<label>Ease of Use</label>
+<input type="range" min="0" max="10" value="9" id="web1">
+
+<label>Customization</label>
+<input type="range" min="0" max="10" value="6" id="web2">
+
+<label>Automation</label>
+<input type="range" min="0" max="10" value="5" id="web3">
+
+<label>Privacy</label>
+<input type="range" min="0" max="10" value="4" id="web4">
+
+<label>Setup</label>
+<input type="range" min="0" max="10" value="10" id="web5">
+
+<label>Integrations</label>
+<input type="range" min="0" max="10" value="6" id="web6">
+</div>
+
+<div class="slider-group">
+<h3>OneClaw</h3>
+
+<label>Ease of Use</label>
+<input type="range" min="0" max="10" value="6" id="one1">
+
+<label>Customization</label>
+<input type="range" min="0" max="10" value="9" id="one2">
+
+<label>Automation</label>
+<input type="range" min="0" max="10" value="9" id="one3">
+
+<label>Privacy</label>
+<input type="range" min="0" max="10" value="9" id="one4">
+
+<label>Setup</label>
+<input type="range" min="0" max="10" value="5" id="one5">
+
+<label>Integrations</label>
+<input type="range" min="0" max="10" value="9" id="one6">
+</div>
+
+</div>
+</div>
+
+<script>
+
+const ctx = document.getElementById("chart");
+
+const chart = new Chart(ctx,{
+type:"radar",
+data:{
+labels:[
+"Ease of Use",
+"Customization",
+"Automation",
+"Privacy",
+"Setup",
+"Integrations"
+],
+datasets:[
+{
+label:"Web AI",
+data:[9,6,5,4,10,6],
+fill:true
+},
+{
+label:"OneClaw",
+data:[6,9,9,9,5,9],
+fill:true
+}
+]
+},
+options:{
+responsive:true,
+scales:{
+r:{
+min:0,
+max:10
+}
+}
+}
+});
+
+function updateChart(){
+
+chart.data.datasets[0].data=[
+web1.value,
+web2.value,
+web3.value,
+web4.value,
+web5.value,
+web6.value
+];
+
+chart.data.datasets[1].data=[
+one1.value,
+one2.value,
+one3.value,
+one4.value,
+one5.value,
+one6.value
+];
+
+chart.update();
+}
+
+document.querySelectorAll("input").forEach(slider=>{
+slider.addEventListener("input",updateChart)
+});
+
+</script>
+
+</body>
+</html>
+```
